@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="documents_employees_folder" model="documents.folder" forcecreate="0">
+            <field name="name">Employees Folder</field>
+            <field name="group_ids" eval="[(4, ref('hr.group_hr_user'))]"/>
+            <field name="read_group_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="user_specific">True</field>
+            <field name="sequence">20</field>
+        </record>
+    </data>
+</odoo>

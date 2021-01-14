@@ -1,0 +1,13 @@
+<odoo>
+    <record id="annual_leaves_auto_create" model="ir.cron">
+        <field name="name">Annual Leaves Creation</field>
+        <field name="model_id" ref="model_hr_leave_type"/>
+        <field name="state">code</field>
+        <field name="code">model.action_annual_leave_auto_create()</field>
+        <field name="interval_number">12</field>
+        <field name="interval_type">months</field>
+        <field name="nextcall"  eval="(datetime.strptime('%s-1-1' % ((datetime.now()+ relativedelta(years=+1)).strftime('%Y')),'%Y-%m-%d'))"/>
+        <field name="numbercall">-1</field>
+        <field name="doall">1</field>
+    </record>
+</odoo>

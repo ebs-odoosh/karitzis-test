@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="hr_leave_warning_reason_wizard_form_view">
+        <field name="name">hr.leave.warning.wizard.form</field>
+        <field name="model">hr.leave.warning.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Warning">
+                <h3>
+                    Please Note That There is Other Approved Leaves at the this Time
+                    from the same Department
+                </h3>
+                <footer>
+                    <button string="Confirm" name="action_confirm" type="object" class="oe_highlight"/>
+                    <button string="Refuse" name="action_refuse" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_leave_warning_reason_wizard" model="ir.actions.act_window">
+        <field name="name">Check Action</field>
+        <field name="res_model">hr.leave.warning.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

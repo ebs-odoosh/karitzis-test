@@ -1,0 +1,50 @@
+<odoo>
+    <record id="time_sheet_first_reminder" model="ir.cron" forcecreate="True">
+        <field name="name">Time Sheet First Reminder</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="state">code</field>
+        <field name="code">model.timesheet_send_first_reminder()</field>
+        <field name="interval_number">7</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall"  eval="(datetime.strptime('%s-1-1' % ((datetime.now()+ relativedelta(years=+1)).strftime('%Y')),'%Y-%m-%d'))"/>
+        <field name="numbercall">-1</field>
+        <field name="doall">1</field>
+        <field name="active" eval="True"/>
+    </record>
+
+     <record id="time_sheet_second_reminder" model="ir.cron">
+        <field name="name">Time Sheet Second Reminder</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="state">code</field>
+        <field name="code">model.timesheet_send_second_reminder()</field>
+        <field name="interval_number">7</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall"  eval="(datetime.strptime('%s-1-5' % ((datetime.now()+ relativedelta(years=+1)).strftime('%Y')),'%Y-%m-%d'))"/>
+        <field name="numbercall">-1</field>
+        <field name="doall">1</field>
+    </record>
+
+    <record id="send_pending_timesheet_report" model="ir.cron">
+        <field name="name">Send Pending Timesheet Report</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="state">code</field>
+        <field name="code">model.action_pending_timesheet_send()</field>
+        <field name="interval_number">7</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall"  eval="(datetime.strptime('%s-1-8' % ((datetime.now()+ relativedelta(years=+1)).strftime('%Y')),'%Y-%m-%d'))"/>
+        <field name="numbercall">-1</field>
+        <field name="doall">1</field>
+    </record>
+
+    <record id="send_outstanding_timesheet_report" model="ir.cron">
+        <field name="name">Send Outstanding Timesheet Report</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="state">code</field>
+        <field name="code">model.action_outstanding_timesheet_send()</field>
+        <field name="interval_number">10</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall"  eval="(datetime.strptime('%s-1-14' % ((datetime.now()+ relativedelta(years=+1)).strftime('%Y')),'%Y-%m-%d'))"/>
+        <field name="numbercall">-1</field>
+        <field name="doall">1</field>
+    </record>
+</odoo>

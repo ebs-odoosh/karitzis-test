@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+         <record id="view_timesheet_category_list" model="ir.ui.view">
+             <field name="name">timesheet.category.list</field>
+             <field name="model">timesheet.category</field>
+             <field eval="8" name="priority"/>
+             <field name="arch" type="xml">
+                 <tree string="Timesheet Category" editable="bottom">
+                     <field name="name"/>
+                 </tree>
+             </field>
+         </record>
+
+         <record id="open_view_timesheet_category" model="ir.actions.act_window">
+             <field name="name">Timesheet Category</field>
+             <field name="res_model">timesheet.category</field>
+             <field name="view_mode">tree</field>
+         </record>
+
+    <menuitem id="timesheet_category"
+              name="Timesheet Category"
+              parent="hr_timesheet.menu_hr_time_tracking"
+              action="open_view_timesheet_category"
+              sequence="30"
+              groups="base.group_user"/>
+
+</odoo>
+

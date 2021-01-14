@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="view_hr_employee_form_changes" model="ir.ui.view">
+            <field name="name">hr_employee.form.changes</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="replace">
+                    <h1 class="oe_read_only">
+                        <field name="name" placeholder="Employee's Name" required="False"/>
+                    </h1>
+                </xpath>
+                <xpath expr="//h1" position="inside">
+                     <h1 class="oe_edit_only">
+                            <field name="firstname"  placeholder="First Name" required="1"/>
+                            <field name="surname"  placeholder="Surname" required="1"/>
+                     </h1>
+                </xpath>
+                <xpath expr="//field[@name='mobile_phone']" position="before">
+                    <field name="unique_code"/>
+                </xpath>
+
+                <xpath expr="//page[@name='personal_information']/group/group[1]" position="after">
+                   <group string="Financial Information">
+                        <field name="si_number"/>
+                        <field name="tax_residency"/>
+                        <field name="tax_number"/>
+                   </group>
+
+                </xpath>
+                <xpath expr="//field[@name='emergency_phone']" position="after">
+                    <field name="emergency_mobile"/>
+                </xpath>
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="approval_id"/>
+                </xpath>
+                <xpath expr="//field[@name='certificate']" position="replace">
+                    <field name="certificate_char"/>
+                </xpath>
+                <xpath expr="//page[@name='hr_settings']" position="after">
+                     <page name="employee_documents" string="Employee Documents">
+                         <field name="employee_document_ids">
+                             <tree editable="bottom">
+                                 <field name="document_type" required="True"/>
+                                 <field name="document" filename="file_name" widget="binary" required="True"/>
+                                 <field name="file_name" invisible="1"/>
+                                 <field name="date_from"/>
+                                 <field name="date_to"/>
+                             </tree>
+                         </field>
+                     </page>
+                </xpath>
+            </field>
+        </record>
+</odoo>
