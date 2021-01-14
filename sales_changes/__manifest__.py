@@ -9,8 +9,8 @@
     'website': "https://www.everbsgroup.com/",
     'depends': ['sale'],
     'data': [
-        'data/mail_data_changes.xml',
         'report/sale_report_template_changes.xml',
+        'data/mail_data_changes.xml',
         'view/sale_order_form_changes.xml'
     ],
     'auto_install': False,
