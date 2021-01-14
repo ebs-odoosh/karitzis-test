@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="karitzis_report_invoice_template">
+    <t t-call="web.external_layout">
+        <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)" />
+        <br/>
+        <div class="page">
+            <div class="oe_structure"/>
+             <div style="width:100%;">
+            <div style="float:left;width:70%">
+               <span style="font-size:20px"><b>Client Name : <span t-field="doc.partner_id.name"/></b></span> <br/>
+               <span style="font-size:18px"><b>Address Line1 : <span t-field="doc.partner_id.street"/>
+                   <t t-if="doc.partner_id.city">/<span t-field="doc.partner_id.city"/></t>
+                   <t t-if="doc.partner_id.country_id">/<span t-field="doc.partner_id.country_id"/></t></b></span><br/>
+               <span style="font-size:18px"><b>Address Line2 :</b></span>
+            </div>
+            <div style="float:right;width:30%">
+                <span style="font-size:20px"><b>Date :</b></span><br/>
+                <span style="font-size:20px"><b>Statement No. :</b></span><br/>
+                <span style="font-size:20px"><b>Case NO. :</b></span><br/>
+                <span style="font-size:20px"><b>VAT Reg. No. : <span t-field="doc.partner_id.vat"/></b></span><br/>
+                <span style="font-size:20px"><b>TIC. No. : 12311480H</b></span><br/>
+            </div>
+            </div>
+            <br/>
+            <div style="margin-top:115px">
+                <h2 class="mt16" style="text-align:center">
+                    <span style="font-size:22px;"><b>INVOICE</b></span><br/>
+                    <span style="font-size:15px;">(This is a VAT invoice)</span>
+            </h2>
+            </div>
+
+
+<!--            <div class="row mt32 mb32" id="informations">-->
+<!--                <div t-if="doc.client_order_ref" class="col-auto mw-100 mb-2">-->
+<!--                    <strong>Your Reference:</strong>-->
+<!--                    <p class="m-0" t-field="doc.client_order_ref"/>-->
+<!--                </div>-->
+<!--                <div t-if="doc.date_order and doc.state not in ['draft','sent']" class="col-auto mw-100 mb-2">-->
+<!--                    <strong>Order Date:</strong>-->
+<!--                    <p class="m-0" t-field="doc.date_order"/>-->
+<!--                </div>-->
+<!--                <div t-if="doc.date_order and doc.state in ['draft','sent']" class="col-auto mw-100 mb-2">-->
+<!--                    <strong>Quotation Date:</strong>-->
+<!--                    <p class="m-0" t-field="doc.date_order" t-options='{"widget": "date"}'/>-->
+<!--                </div>-->
+<!--                <div t-if="doc.validity_date and doc.state in ['draft', 'sent']" class="col-auto mw-100 mb-2" name="expiration_date">-->
+<!--                    <strong>Expiration:</strong>-->
+<!--                    <p class="m-0" t-field="doc.validity_date"/>-->
+<!--                </div>-->
+<!--                <div t-if="doc.user_id.name" class="col-auto mw-100 mb-2">-->
+<!--                    <strong>Salesperson:</strong>-->
+<!--                    <p class="m-0" t-field="doc.user_id"/>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <!-- Is there a discount on at least one line? -->
+<!--            <t t-set="display_discount" t-value="any([l.discount for l in doc.order_line])"/>-->
+
+            <table class="table table-border"
+                            style="width:100%;border: 1px solid black;border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color:#b3b3ff">
+                        <th name="th_sn">S/N.</th>
+                        <th name="th_description" class="text-left">Details</th>
+                        <th name="th_priceunit" class="text-right">Expenses/Disp.</th>
+                        <th name="th_priceunit" class="text-right">Fee</th>
+                        <th name="th_priceunit" class="text-right">VAT</th>
+                        <th name="th_priceunit" class="text-right">VAT Amount</th>
+<!--                        <th name="th_discount" t-if="display_discount" class="text-right" groups="product.group_discount_per_so_line">-->
+<!--                            <span>Disc.%</span>-->
+<!--                        </th>-->
+<!--                        <th name="th_taxes" class="text-right">Taxes</th>-->
+<!--                        <th name="th_subtotal" class="text-right">-->
+<!--                            <t groups="account.group_show_line_subtotals_tax_excluded">Amount</t>-->
+<!--                            <t groups="account.group_show_line_subtotals_tax_included">Total Price</t>-->
+<!--                        </th>-->
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <t t-set="current_subtotal" t-value="0"/>
+                    <t t-set="sn" t-value="0" />
+                    <t t-set="total_expenses" t-value="0"/>
+                    <t t-set="total_fee" t-value="0"/>
+                    <t t-set="total_vat" t-value="0"/>
+                    <t t-set="total_line_taxes" t-value="0"/>
+                    <t t-foreach="doc.invoice_line_ids" t-as="line">
+                        <t t-set="sn" t-value="sn+1"/>
+                        <t t-set="total_expenses" t-value="total_expenses+line.price_unit"/>
+                        <t t-set="total_fee" t-value="total_fee+line.fee"/>
+                         <t t-set="total_vat" t-value="total_vat+total_line_taxes"/>
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                        <tr style="border:1px solid black" t-att-class="'bg-200 font-weight-bold o_line_section' if line.display_type == 'line_section' else 'font-italic o_line_note' if line.display_type == 'line_note' else ''">
+                            <t t-if="not line.display_type">
+                                <td name="td_sn"><span t-esc="sn"/> </td>
+                                <td name="td_name" class="text-left"><span t-field="line.name"/></td>
+                                 <td name="td_priceunit" class="text-right">
+                                    <span t-field="line.price_unit"/>
+                                </td>
+<!--                                <td name="td_quantity" class="text-right">-->
+<!--                                    <span t-field="line.product_uom_qty"/>-->
+<!--                                    <span t-field="line.product_uom" groups="uom.group_uom"/>-->
+<!--                                </td>-->
+                                <td name="td_priceunit" class="text-right">
+                                    <span t-field="line.fee"/>
+                                </td>
+                                <td class="text-right">
+                                    <t t-foreach="line.tax_ids" t-as="tax">
+                                          <t t-set="total_line_taxes" t-value="total_line_taxes+(tax.amount * line.price_unit)"/>
+                                            <span t-esc="tax.name"/>
+                                    </t>
+                                </td>
+                                 <td  class="text-right">
+                                    <span t-esc="total_line_taxes"/>
+                                </td>
+<!--                                <td t-if="display_discount" class="text-right" groups="product.group_discount_per_so_line">-->
+<!--                                    <span t-field="line.discount"/>-->
+<!--                                </td>-->
+<!--                                <td name="td_taxes" class="text-right">-->
+<!--                                    <span t-esc="', '.join(map(lambda x: (x.description or x.name), line.tax_id))"/>-->
+<!--                                </td>-->
+<!--                                <td name="td_subtotal" class="text-right o_price_total">-->
+<!--                                    <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>-->
+<!--                                    <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>-->
+<!--                                </td>-->
+                            </t>
+                            <t t-if="line.display_type == 'line_section'">
+                                <td name="td_section_line" colspan="99">
+                                    <span t-field="line.name"/>
+                                </td>
+                                <t t-set="current_section" t-value="line"/>
+                                <t t-set="current_subtotal" t-value="0"/>
+                            </t>
+                            <t t-if="line.display_type == 'line_note'">
+                                <td name="td_note_line" colspan="99">
+                                    <span t-field="line.name"/>
+                                </td>
+                            </t>
+                        </tr>
+
+                        <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section')">
+                            <tr class="is-subtotal text-right">
+                                <td name="td_section_subtotal" colspan="99">
+                                    <strong class="mr16">Subtotal</strong>
+                                    <span
+                                        t-esc="current_subtotal"
+                                        t-options='{"widget": "monetary", "display_currency": doc.currency_id}'
+                                    />
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                    <tr style="border: 1px solid black;">
+                            <td/>
+                            <td class="text-center">
+                                <t t-set="total_columns" t-value="total_expenses+total_fee+total_vat"/>
+                                <span class="text-center">
+                                    <b>TOTAL OF COLUMNS:
+                                    <span t-esc="total_columns"
+                                    t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/> </b>
+                                </span>
+
+                            </td>
+                            <td class="text-right" style="background-color:#b3b3ff;" t-esc="total_expenses" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            <td class="text-right" style="background-color:#b3b3ff;" t-esc="total_fee" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            <td style="background-color:#b3b3ff;"/>
+                            <td class="text-right" style="background-color:#b3b3ff;" t-esc="total_vat" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                        </tr>
+                    <tr>
+                        <td colspan="2"/>
+                        <td colspan="3" style="background-color:#b3b3ff;">
+                        <span>
+                            <b>TOTAL PAYABLE:   EUR
+                            <span t-esc="total_columns"
+                                    t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </b>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <span>
+                Interest shall apply at a rate of nine per cent (9%) or at a rate equivalent to the maximum extent permitted by Law, in respect of invoices remaining outstanding for a period exceeding 15 days from receipt of the present invoice. All charges pertaining to the Legal fee of our firm, shall, unless agreed to in advance, be determined in accordance with regulation 10 of the Resolution of Disputes Resulting from the Provision of Services of Persons Practicing the Law (Out of Court Cases) Regulation of 2018 (as has, or shall be, amended).
+            </span>
+             <br/>
+            <div>
+                <br/>
+                <h3 style="text-align:center;text-decoration: underline;">Please remit the quoted amount to any of the following bank accounts</h3>
+            <table style="font-size:18px;font-weight: bold;">
+                <tr style="border:1px solid black">
+                    <td>Banker:</td>
+                    <td>HELLENIC BANK </td>
+                </tr>
+                <tr style="border:1px solid black">
+                    <td>Account No. :</td>
+                    <td>290-01-643686-01</td>
+                </tr>
+                <tr style="border:1px solid black">
+                    <td>Swift  :</td>
+                    <td>HEBACY2N</td>
+                </tr>
+                <tr style="border:1px solid black">
+                    <td>Beneficiary :</td>
+                    <td>A. KARITZIS &amp; ASSOCIATES L.L.C.</td>
+                </tr>
+                 <tr style="border:1px solid black">
+                    <td>IBAN  :</td>
+                    <td>CY92005002900002900164368601</td>
+                </tr>
+            </table>
+            <br/>
+
+
+            <table style="font-size:18px;font-weight: bold;">
+                <tr style="border:1px solid black">
+                    <td>Banker:</td>
+                    <td>BANK OF CYPRUS PUBLIC COMPANY LIMITED  </td>
+                </tr>
+                <tr style="border:1px solid black">
+                    <td>Account No. :</td>
+                    <td>357005618415</td>
+                </tr>
+                <tr style="border:1px solid black">
+                    <td>Swift  :</td>
+                    <td>BCYPCY2N</td>
+                </tr>
+                <tr style="border:1px solid black">
+                    <td>Beneficiary :</td>
+                    <td>A. KARITZIS &amp; ASSOCIATES L.L.C.</td>
+                </tr>
+                 <tr style="border:1px solid black">
+                    <td>IBAN  :</td>
+                    <td>CY84 0020 0195 0000 3570 0561 8415</td>
+                </tr>
+            </table>
+                <br/>
+       <table style="font-size:18px;font-weight: bold;">
+                <tr style="border:1px solid black">
+                    <td>Banker:</td>
+                    <td>EUROBANK EFG  </td>
+                </tr>
+                <tr style="border:1px solid black">
+                    <td>Account No. :</td>
+                    <td>200100120591</td>
+                </tr>
+                <tr style="border:1px solid black">
+                    <td>Swift  :</td>
+                    <td>ERBKCY2NXXX</td>
+                </tr>
+                <tr style="border:1px solid black">
+                    <td>Beneficiary :</td>
+                    <td>A. KARITZIS &amp; ASSOCIATES L.L.C.</td>
+                </tr>
+                 <tr style="border:1px solid black">
+                    <td>IBAN  :</td>
+                    <td>CY13018000050000200100120591</td>
+                </tr>
+            </table>
+                <br/>
+                <h3 style="text-align:left;text-decoration: underline;">Important Notice</h3>
+                <span>
+                    Where settlement of the Statement of Services Provided is carried out by or on behalf of the Client using electronic means of payment or by way of a bank wire transfer, payment shall be effected net of any exchange differences, commissions, charges, fees or rates applied by any service provider or financial institution. For the avoidance of any doubt any such charges, fees or rates shall, where applicable, be solely and exclusively incurred by the Client or the person authorising payment, as the case may be.
+                    <br/>
+                    In the event that any deduction(s) relating to such charges, fees or rates has been applied to any payment received by the Firm, our Firm shall be entitled to charge an amount equivalent to any such deduction(s) on the Client’s next Statement of Services Provided.
+                </span>
+            </div>
+        </div>
+    </t>
+</template>
+    <template id="karitzis_report_invoice">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="accounting_changes.karitzis_report_invoice_template" t-lang="doc.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+     <report
+            id="karitzis_action_report_invoice"
+            string="Karitzis Invoice"
+            model="account.move"
+            report_type="qweb-html"
+            groups="sale.group_proforma_sales"
+            file="accounting_changes.karitzis_report_invoice"
+            name="accounting_changes.karitzis_report_invoice"
+            print_report_name="'Invoice - %s' % (object.name)"
+        />
+
+</odoo>

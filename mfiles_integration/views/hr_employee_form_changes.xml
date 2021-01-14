@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="view_hr_employee_form_changes" model="ir.ui.view">
+            <field name="name">hr_employee.form.changes</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='hr_settings']" position="after">
+                    <page name="mfiles_test" string="Mfiles TEst">
+                        <group>
+                            <button name="get_latest_employees" string="Test API" type="object"/>
+                            <field name="mfiles_response"/>
+                            <field name="mfiles_response2"/>
+                            <field name="search_result"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+</odoo>

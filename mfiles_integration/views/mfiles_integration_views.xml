@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+     <record id="mfiles_integration_form" model="ir.ui.view">
+            <field name="name">mfiles.integration.form</field>
+            <field name="model">mfiles.integration</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="integration_date"/>
+                                <field name="object_type"/>
+                            </group>
+                            <group>
+                                <field name="response_status"/>
+                            </group>
+                            <field name="error_msg"/>
+                        </group>
+                            <field name="object_ids">
+                                <tree>
+                                    <field name="object_state"/>
+                                    <field name="mfiles_id"/>
+                                    <field name="error_msg"/>
+                                </tree>
+                            </field>
+
+                    </sheet>
+                </form>
+            </field>
+     </record>
+
+    <record id="mfiles_integration_tree" model="ir.ui.view">
+            <field name="name">mfiles.integration.tree</field>
+            <field name="model">mfiles.integration</field>
+            <field name="arch" type="xml">
+                <tree string="Mfiles Integration">
+                    <field name="integration_date"/>
+                    <field name="object_type"/>
+                </tree>
+            </field>
+        </record>
+    <record id="open_view_list_mfiles_integration" model="ir.actions.act_window">
+             <field name="name">MFiles Integration List</field>
+             <field name="res_model">mfiles.integration</field>
+             <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="integration" name="Integration" parent="base.menu_custom"/>
+    <menuitem id="mfiles_menu"
+              name="MFiles Integration"
+              parent="mfiles_integration.integration"
+              action="open_view_list_mfiles_integration"/>
+
+</odoo>

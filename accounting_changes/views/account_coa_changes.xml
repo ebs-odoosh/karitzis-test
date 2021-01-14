@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="chart_of_account_search_view_changes" model="ir.ui.view">
+            <field name="name">account.account.coa.search.changes</field>
+            <field name="model">account.account</field>
+            <field name="priority">50</field>
+            <field name="inherit_id" ref="account.view_account_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='root_id']" position="replace">
+                        <field name="group_id"  icon="fa-filter"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>

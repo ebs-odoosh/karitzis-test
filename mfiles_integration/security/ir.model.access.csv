@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+mfiles_integration,mfiles_integration,model_mfiles_integration,,1,1,1,1
+mfiles_objects_log,mfiles_objects_log,model_mfiles_objects_log,,1,1,1,1
+
+
+

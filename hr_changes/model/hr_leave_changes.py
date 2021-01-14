@@ -4,6 +4,7 @@
 from odoo import models, fields,api ,_
 from odoo.exceptions import UserError
 from datetime import datetime , timedelta
+
 class HrLeaveInherit(models.Model):
     _inherit = 'hr.leave'
 
@@ -80,9 +81,9 @@ class HrLeaveInherit(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals['employee_id']:
-            start_date = datetime.strptime(vals['request_date_from'], '%Y-%m-%d')
-            end_date = datetime.strptime(vals['request_date_to'], '%Y-%m-%d')
+        if vals.get('employee_id'):
+            start_date = datetime.strptime(vals.get('request_date_from'), '%Y-%m-%d')
+            end_date = datetime.strptime(vals.get('request_date_to'), '%Y-%m-%d')
             # print(start_date)
             # print(end_date)
             employee_id = self.env['hr.employee'].browse(vals['employee_id'])
